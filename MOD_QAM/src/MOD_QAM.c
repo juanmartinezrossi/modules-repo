@@ -35,7 +35,7 @@
 #include "MOD_QAM_params.h"
 #include "MOD_QAM_functions.h"
 
-//comentario
+//comentario2222
 //#define DEBUG_STANDALONE									// Uncomment that line when in StandAlone Mode
 
 /* MODULE DEFINED PARAMETERS.*/
