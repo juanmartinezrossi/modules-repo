@@ -35,7 +35,7 @@
 #include "MOD_QAM_params.h"
 #include "MOD_QAM_functions.h"
 
-
+//comentario
 //#define DEBUG_STANDALONE									// Uncomment that line when in StandAlone Mode
 
 /* MODULE DEFINED PARAMETERS.*/
@@ -100,7 +100,7 @@ int initialize() {
 
 int work(void *inp, void *out) {
 	static int Tslot=0;
-	int snd_samples=0, snd_samples1=0, rcv_samples=0;
+	int snd_samples=0, snd_samples1=0, rcv_samples=0,a=0;
 
 	_Complex float *input0CPLX;
 	char *input0CHAR;
@@ -114,8 +114,15 @@ int work(void *inp, void *out) {
 		input0CHAR = in(inp,0);
 		rcv_samples = get_input_samples(0);
 		output0CPLX = out(out,0);
-		if(oParam.debugg)printf("MOD rcv_samples(BITS)=%d\n", rcv_samples);
-		if(oParam.modulation==M_16QAM)snd_samples = mod_16QAM(input0CHAR, rcv_samples, output0CPLX);
+		if(oParam.debugg)printf("MOD rcv_samples(BITS)=%d, modulation=%d\n", rcv_samples, oParam.modulation);
+
+        if(oParam.modulation==M_4QAM)snd_samples = mod_4QAM(input0CHAR, rcv_samples, output0CPLX);
+        if(oParam.modulation==M_16QAM)snd_samples = mod_16QAM(input0CHAR, rcv_samples, output0CPLX);
+        if(oParam.modulation==M_64QAM)snd_samples = mod_64QAM(input0CHAR, rcv_samples, output0CPLX);
+        if(oParam.modulation==M_256QAM)snd_samples = mod_256QAM(input0CHAR, rcv_samples, output0CPLX);
+        if(oParam.modulation==M_1024QAM)snd_samples = mod_1024QAM(input0CHAR, rcv_samples, output0CPLX);
+
+
 		if(oParam.debugg)printf("MOD snd_samples(CPLX FLOAT)=%d\n", snd_samples);
 		snd_samples=snd_samples*sizeof(_Complex float);								//Send as chars
 	}
@@ -127,8 +134,14 @@ int work(void *inp, void *out) {
 		rcv_samples = get_input_samples(0)/sizeof(_Complex float);		//Received as chars
 		output0FLOAT = out(out,0);
 //		print_array("IN_DEMOD", IN_TYPE, input0CPLX, 16, 8);
-		if(oParam.debugg)printf("DEMOD rcv_samples(CPLX FLOAT)=%d\n", rcv_samples);
-		if(oParam.modulation==M_16QAM)snd_samples = soft_demod_16QAM(input0CPLX, rcv_samples, output0FLOAT);
+		if(oParam.debugg)printf("DEMOD rcv_samples(CPLX FLOAT)=%d, modulation=%d\n", rcv_samples, oParam.modulation);
+
+        if(oParam.modulation==M_4QAM)snd_samples = soft_demod_4QAM(input0CPLX, rcv_samples, output0FLOAT);
+        if(oParam.modulation==M_16QAM)snd_samples = soft_demod_16QAM(input0CPLX, rcv_samples, output0FLOAT);
+        if(oParam.modulation==M_64QAM)snd_samples = soft_demod_64QAM(input0CPLX, rcv_samples, output0FLOAT);
+        if(oParam.modulation==M_256QAM)snd_samples = soft_demod_256QAM(input0CPLX, rcv_samples, output0FLOAT);
+        if(oParam.modulation==M_1024QAM)snd_samples = soft_demod_1024QAM(input0CPLX, rcv_samples, output0FLOAT);
+
 //		print_array("OUT_DEMOD", "FLOAT", output0FLOAT, 16, 8);
 
 		if(oParam.debugg)printf("DEMOD snd_samples(FLOATS)=%d\n", snd_samples);
